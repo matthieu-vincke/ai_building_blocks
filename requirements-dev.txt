@@ -1,0 +1,15 @@
+# Testing tools
+pytest
+requests-mock
+
+# Type checking and linting
+mypy
+flake8
+
+# Code formatting
+black
+isort
+
+# Optional but useful
+pytest-cov       # test coverage reporting
+pre-commit       # git hooks for auto-format/lint

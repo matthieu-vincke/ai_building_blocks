@@ -1,0 +1,5 @@
+# Core Python libraries
+requests
+beautifulsoup4
+sentence-transformers
+numpy
