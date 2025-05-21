@@ -1,6 +1,6 @@
 import os
 
-from embedding.vectorstore.mongodb_store import MongoDBVectorStoreFactory
+from components.embedding.vectorstore.mongodb_store import MongoDBVectorStoreFactory
 from langchain.schema import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 
