@@ -1,5 +1,6 @@
 # Testing tools
 pytest
+pytest-asyncio
 requests-mock
 
 # Type checking and linting

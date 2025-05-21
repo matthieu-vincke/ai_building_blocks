@@ -1,60 +1,131 @@
-# ai_building_blocks
-Building Blocks for AI Applications
+# 🧠 AI Building Blocks
 
-pre-commit install
+Modular, testable components to accelerate the development of AI applications in Python.
 
-Local Machine
+## 📂 Project Structure
 
-make venv PYTHON_BIN="C:/Softs/Py310_64/python.exe"
-make install
-
-
-ai-building-blocks/
+```
+ai_building_blocks/
 │
 ├── components/
-    ├── embedding/
-    │   ├── encoder.py         # Convert text/data to embeddings using models
-    │   ├── vector_store.py    # Interface with vector DBs (FAISS, Pinecone, Chroma, etc.)
-    │   └── pipeline.py        # End-to-end pipeline: from text → embeddings → vector DB
-    ├── web/
-    │   ├── crawler.py        # handles website crawling, pagination, robots.txt
-    │   ├── extractor.py      # parsing HTML, extracting structured data
-    │   └── cleaner.py        # optional: clean or normalize scraped content
-│   ├── data/
-│   │   ├── loaders.py
-│   │   ├── preprocessors.py
-│   ├── models/
-│   │   ├── base_model.py
-│   │   ├── mlp.py
-│   ├── training/
-│   │   ├── trainer.py
-│   │   ├── scheduler.py
-│   ├── evaluation/
-│   │   ├── metrics.py
-│   │   ├── visualizations.py
+│   ├── web/
+│   │   └── downloader.py         # Functions to crawl and download documents
+│   ├── embedding/
+│   │   └── embedder.py           # Embeds text and stores in vector DB
 │   └── utils/
-│       ├── logger.py
-│       ├── config.py
-│
-├── examples/
-│   ├── classification/
-│   │   └── train_mlp.py
-│   ├── regression/
-│       └── train_regression.py
+│       └── logger.py             # Standardized logger
 │
 ├── tests/
-│   ├── test_models.py
-│   ├── test_data.py
+│   ├── web/
+│   │   └── test_downloader.py
+│   └── embedding/
+│       └── test_embedder.py
 │
-├── scripts/
-│   ├── download_data.py
-│   └── convert_model.py
-│
-├── docs/
-│   └── README.md
-│
-├── .gitignore
 ├── requirements.txt
-├── setup.py
-├── README.md
-└── pyproject.toml (optional, for modern Python packaging)
+├── requirements-dev.txt
+├── Makefile
+└── README.md
+```
+
+## 🚀 Features
+
+- 📄 **Web Crawling & Document Downloading**: HTML-based file extraction
+- 🧠 **Text Embedding**: Convert text to vector representations
+- 🗃️ **Vector Storage**: (Pluggable) vector DB integration
+- 🛠️ **Utilities**: Logging, formatting, testing
+- ✅ **Test Coverage**: With `pytest` and mocking
+- ⚙️ **Cross-platform Build System**: `make` support (with Windows compatibility)
+
+## 🔧 Setup
+
+1. **Create and activate virtual environment**
+```bash
+make venv PYTHON_BIN=/path/to/python
+```
+
+2. **Install dependencies**
+```bash
+make dev-install
+```
+
+3. **Run checks**
+```bash
+make check
+```
+
+## 🧪 Testing
+
+```bash
+make test
+```
+
+## 📦 Dependencies
+
+Main requirements in `requirements.txt`:
+
+- `requests`
+- `beautifulsoup4`
+- `openai` or other embedding providers
+- `chromadb` (optional for vector DB)
+
+Dev/test in `requirements-dev.txt`:
+
+- `pytest`
+- `pytest-mock`
+- `flake8`
+- `black`
+- `isort`
+- `pre-commit`
+
+## ✍️ Logging
+
+Uses `components.utils.logger` to ensure consistent logging throughout modules.
+
+```python
+from components.utils.logger import get_logger
+logger = get_logger(__name__)
+logger.info("Hello from logger!")
+```
+
+## 📘 Example Usage
+
+```python
+from components.web.downloader import download_documents_from_html
+from components.embedding.embedder import embed_texts
+
+html = "<html>...</html>"
+download_documents_from_html(html, base_url="https://example.com", download_folder="./data")
+
+embeddings = embed_texts(["Document content here"], embedding_model="openai", persist=True)
+```
+
+## 🔒 Code Quality with Pre-commit
+
+To automatically enforce code formatting and linting before each commit, this project supports `pre-commit` hooks.
+
+### 🔧 Setup
+
+```bash
+# Install pre-commit if not already installed
+pip install pre-commit
+
+# Install the hooks defined in .pre-commit-config.yaml
+pre-commit install
+```
+
+Now, every time you commit, tools like `black` and `isort` will run automatically.
+
+To manually run all hooks on all files:
+```bash
+pre-commit run --all-files
+```
+
+## ✅ TODO
+
+- [ ] Add support for LangChain or HuggingFace embeddings
+- [ ] Add command-line interface
+- [ ] Extend vector DB support (e.g. Pinecone, Weaviate)
+
+## 📄 License
+
+MIT License

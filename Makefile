@@ -1,17 +1,24 @@
 # Detect OS and set correct script folder
-
 PYTHON_BIN ?= python
 VENV := .venv
 
 ifeq ($(OS),Windows_NT)
   VENV_BIN := $(VENV)/Scripts
+  PYTHON := $(VENV_BIN)/python.exe
+  PIP := $(VENV_BIN)/pip.exe
+  PYTEST := $(VENV_BIN)/pytest.exe
+  BLACK := $(VENV_BIN)/black.exe
+  ISORT := $(VENV_BIN)/isort.exe
+  PRE_COMMIT := $(VENV_BIN)/pre-commit.exe
 else
   VENV_BIN := $(VENV)/bin
+  PYTHON := $(VENV_BIN)/python
+  PIP := $(VENV_BIN)/pip
+  PYTEST := $(VENV_BIN)/pytest
+  BLACK := $(VENV_BIN)/black
+  ISORT := $(VENV_BIN)/isort
+  PRE_COMMIT := $(VENV_BIN)/pre-commit
 endif
-
-
-PYTHON := $(VENV_BIN)/python
-PIP := $(VENV_BIN)/pip
 
 REQ := requirements.txt
 REQ_DEV := requirements-dev.txt
@@ -47,16 +54,15 @@ dev-install: venv
 
 .PHONY: pre-commit-install
 pre-commit-install: venv
-	$(VENV_BIN)/pre-commit install
+	$(PRE_COMMIT) install
 
 .PHONY: pre-commit-run
 pre-commit-run: venv
-	$(VENV_BIN)/pre-commit run --all-files
-
+	$(PRE_COMMIT) run --all-files
 
 .PHONY: test
 test: dev-install venv
-	$(VENV_BIN)/pytest -v tests/
+	$(PYTEST) -v tests/
 
 .PHONY: build
 build: clean venv
@@ -75,8 +81,12 @@ upload-test: build
 
 .PHONY: format
 format: venv
-	$(VENV_BIN)/black components tests
-	$(VENV_BIN)/isort components tests
+	$(BLACK) components tests
+	$(ISORT) components tests
+
+.PHONY: lint
+lint: venv
+	$(VENV_BIN)/flake8 components tests
 
 .PHONY: check
 check: format lint test
