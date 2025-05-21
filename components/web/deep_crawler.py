@@ -1,12 +1,12 @@
 import hashlib
 from datetime import datetime
-from typing import List, Dict
+from typing import Dict, List
 
-from langchain.schema import Document
 from crawl4ai import AsyncWebCrawler, CrawlerRunConfig
-from crawl4ai.deep_crawling import BFSDeepCrawlStrategy
 from crawl4ai.content_scraping_strategy import LXMLWebScrapingStrategy
+from crawl4ai.deep_crawling import BFSDeepCrawlStrategy
 from crawl4ai.markdown_generation_strategy import DefaultMarkdownGenerator
+from langchain.schema import Document
 
 from components.utils.logger import get_logger
 
@@ -43,13 +43,15 @@ async def crawl_website_for_documents(
             "escape_html": False,
             "body_width": 80,
             "skip_internal_links": True,
-            "include_sup_sub": True
+            "include_sup_sub": True,
         }
     )
 
     config = CrawlerRunConfig(
         markdown_generator=md_generator,
-        deep_crawl_strategy=BFSDeepCrawlStrategy(max_depth=max_depth, include_external=False),
+        deep_crawl_strategy=BFSDeepCrawlStrategy(
+            max_depth=max_depth, include_external=False
+        ),
         scraping_strategy=LXMLWebScrapingStrategy(),
         verbose=True,
         word_count_threshold=word_count_threshold,

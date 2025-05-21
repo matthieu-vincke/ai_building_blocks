@@ -1,6 +1,7 @@
-import pytest
 import asyncio
-from unittest.mock import patch, AsyncMock
+from unittest.mock import AsyncMock, patch
+
+import pytest
 from langchain.schema import Document
 
 from components.web.deep_crawler import crawl_website_for_documents
@@ -66,7 +67,9 @@ async def test_metadata_merging():
         instance = MockCrawler.return_value.__aenter__.return_value
         instance.arun.return_value = [mock_result]
 
-        documents = await crawl_website_for_documents("https://example.com", metadata=custom_meta)
+        documents = await crawl_website_for_documents(
+            "https://example.com", metadata=custom_meta
+        )
 
         doc_meta = documents[0].metadata
         assert doc_meta["source_type"] == "news"
