@@ -71,6 +71,7 @@ html_theme_options = {
 # HTML settings
 html_title = 'AI Building Blocks Documentation'
 html_short_title = 'AI Building Blocks'
+
 html_static_path = ['_static']
 html_favicon = None  # Add a favicon path if you have one
 html_logo = None     # Add a logo path if you have one
