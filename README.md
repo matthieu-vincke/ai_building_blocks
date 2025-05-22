@@ -2,6 +2,8 @@
 
 Modular, testable components to accelerate the development of AI applications in Python.
 
+Docs: https://matthieu-vincke.github.io/ai_building_blocks/
+
 ## 📂 Project Structure
 
 ```
