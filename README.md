@@ -40,6 +40,10 @@ ai_building_blocks/
 
 ## 🔧 Setup
 
+```bash
+PYTHONPATH=.
+```
+
 1. **Create and activate virtual environment**
 ```bash
 make venv PYTHON_BIN=/path/to/python
