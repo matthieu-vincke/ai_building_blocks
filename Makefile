@@ -86,7 +86,9 @@ format: venv
 
 .PHONY: docs
 docs: venv
-	$(VENV_BIN)/sphinx-apidoc -o source components
+	@echo "Building documentation..."
+	@rm -rf docs/source
+	$(VENV_BIN)/sphinx-apidoc -f -o docs/source components
 	$(VENV_BIN)/sphinx-build -b html docs docs/_build/html
 
 .PHONY: lint
@@ -98,6 +100,8 @@ check: format lint test
 
 .PHONY: publish-docs
 publish-docs: docs
+	@echo "Creating .nojekyll file for GitHub Pages..."
+	@touch docs/_build/html/.nojekyll
 	cd docs/_build/html && \
 	rm -rf .git && \
 	git init && \
