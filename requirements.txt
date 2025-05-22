@@ -20,3 +20,7 @@ sentence-transformers
 langchain-huggingface
 trafilatura
 keybert
+furo
+sphinx
+sphinx-rtd-theme
+myst-parser

@@ -84,12 +84,29 @@ format: venv
 	$(BLACK) components tests
 	$(ISORT) components tests
 
+.PHONY: docs
+docs: venv
+	$(VENV_BIN)/sphinx-apidoc -o source components
+	$(VENV_BIN)/sphinx-build -b html docs docs/_build/html
+
 .PHONY: lint
 lint: venv
 	$(VENV_BIN)/flake8 components tests
 
 .PHONY: check
 check: format lint test
+
+.PHONY: publish-docs
+publish-docs: docs
+	cd docs/_build/html && \
+	rm -rf .git && \
+	git init && \
+	git checkout -b gh-pages && \
+	git add . && \
+	git commit -m "Publish docs" && \
+	git remote add origin https://github.com/matthieu-vincke/ai_building_blocks.git && \
+	git push --force origin gh-pages
+
 
 .PHONY: clean
 clean:
