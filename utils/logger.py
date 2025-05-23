@@ -5,7 +5,7 @@ from typing import Optional
 
 def get_logger(name: Optional[str] = None, level: int = logging.INFO) -> logging.Logger:
     """
-    Returns a configured logger instance with a consistent format.
+    Returns a configured logger instance with a consistent format including filename and line number.
 
     Args:
         name (str, optional): Name of the logger. Defaults to root logger.
@@ -16,11 +16,10 @@ def get_logger(name: Optional[str] = None, level: int = logging.INFO) -> logging
     """
     logger = logging.getLogger(name)
 
-    # Avoid adding multiple handlers to the same logger
     if not logger.handlers:
         handler = logging.StreamHandler(sys.stdout)
         formatter = logging.Formatter(
-            fmt="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+            fmt="%(asctime)s [%(levelname)s] %(name)s (%(filename)s:%(lineno)d): %(message)s",
             datefmt="%Y-%m-%d %H:%M:%S",
         )
         handler.setFormatter(formatter)

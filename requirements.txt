@@ -24,3 +24,5 @@ furo
 sphinx
 sphinx-rtd-theme
 myst-parser
+python-dotenv
+pymongo

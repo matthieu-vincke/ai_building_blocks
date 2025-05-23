@@ -8,13 +8,24 @@ from crawl4ai.deep_crawling import BFSDeepCrawlStrategy
 from crawl4ai.markdown_generation_strategy import DefaultMarkdownGenerator
 from langchain.schema import Document
 
-from components.utils.logger import get_logger
+from utils.logger import get_logger
 
 logger = get_logger(__name__)
 today_str = datetime.now().strftime("%Y-%m-%d")
 
 
 def hash_content(content: str) -> str:
+    """
+    Compute a SHA-256 hash of the given text content.
+
+    This is used to identify and skip duplicate pages during the crawl.
+
+    Parameters:
+        content (str): The text content to hash.
+
+    Returns:
+        str: The SHA-256 hash of the input string.
+    """
     return hashlib.sha256(content.encode("utf-8")).hexdigest()
 
 
@@ -25,17 +36,30 @@ async def crawl_website_for_documents(
     word_count_threshold: int = 200,
 ) -> List[Document]:
     """
-    Crawl a website and return a list of cleaned LangChain Document objects.
+    Asynchronously crawls a website and returns a list of deduplicated, cleaned `Document` objects.
 
-    :param website_url: The base URL to crawl
-    :param metadata: Optional static metadata to attach to each Document
-    :param max_depth: Maximum depth for BFS crawling
-    :param word_count_threshold: Minimum words to include a page
-    :return: List of langchain.schema.Document objects
+    This function uses a BFS deep crawling strategy and filters out pages with low content or
+    duplicate text. HTML content is converted to Markdown before being packaged as a LangChain
+    `Document`.
+
+    Parameters:
+        website_url (str): The root URL to start crawling from.
+        metadata (Dict, optional): Additional metadata to attach to each `Document`.
+        max_depth (int, optional): Maximum link-following depth for the crawl. Default is 5.
+        word_count_threshold (int, optional): Minimum number of words required to retain a page. Default is 200.
+
+    Returns:
+        List[Document]: A list of LangChain `Document` objects with `page_content` and associated metadata.
+
+    Notes:
+        - Duplicate documents (based on text hash) are skipped.
+        - Empty or non-substantive pages are ignored.
+        - Metadata includes crawl depth, source URL, and crawl date.
     """
     metadata = metadata or {}
     logger.info(f"Starting deep crawl of {website_url}")
 
+    # Initialize Markdown generator with options for cleaner output
     md_generator = DefaultMarkdownGenerator(
         options={
             "ignore_links": True,
@@ -47,10 +71,12 @@ async def crawl_website_for_documents(
         }
     )
 
+    # Configure the crawling run
     config = CrawlerRunConfig(
         markdown_generator=md_generator,
         deep_crawl_strategy=BFSDeepCrawlStrategy(
-            max_depth=max_depth, include_external=False
+            max_depth=max_depth,
+            include_external=False,
         ),
         scraping_strategy=LXMLWebScrapingStrategy(),
         verbose=True,

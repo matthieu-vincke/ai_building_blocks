@@ -85,10 +85,10 @@ Dev/test in `requirements-dev.txt`:
 
 ## ✍️ Logging
 
-Uses `components.utils.logger` to ensure consistent logging throughout modules.
+Uses `utils.logger` to ensure consistent logging throughout modules.
 
 ```python
-from components.utils.logger import get_logger
+from utils.logger import get_logger
 logger = get_logger(__name__)
 logger.info("Hello from logger!")
 ```

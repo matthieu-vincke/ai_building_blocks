@@ -24,11 +24,11 @@ class MongoDBVectorStoreFactory:
     @staticmethod
     def create(embedding_model, **kwargs):
         connection_string = kwargs.get("connection_string") or os.getenv(
-            "ATLAS_CONNECTION_STRING"
+            "MONGO_CONNECTION_STRING"
         )
-        database = kwargs.get("database") or os.getenv("ATLAS_DB")
-        collection = kwargs.get("collection") or os.getenv("ATLAS_COLLECTION")
-        index_name = kwargs.get("index_name") or os.getenv("ATLAS_INDEX")
+        database = kwargs.get("database") or os.getenv("MONGO_DB")
+        collection = kwargs.get("collection") or os.getenv("MONGO_COLLECTION")
+        index_name = kwargs.get("index_name") or os.getenv("MONGO_INDEX")
 
         if not all([connection_string, database, collection, index_name]):
             raise ValueError("Missing MongoDB Atlas config.")
