@@ -10,6 +10,8 @@ ifeq ($(OS),Windows_NT)
   BLACK := $(VENV_BIN)/black.exe
   ISORT := $(VENV_BIN)/isort.exe
   PRE_COMMIT := $(VENV_BIN)/pre-commit.exe
+  # Assuming crawl4ai-setup is an executable or a script that might be in Scripts
+  CRAWL4AI_SETUP_CMD := $(VENV_BIN)/crawl4ai-setup.bat # Or .exe, or simply $(VENV_BIN)/crawl4ai-setup if it's a direct executable
 else
   VENV_BIN := $(VENV)/bin
   PYTHON := $(VENV_BIN)/python
@@ -18,6 +20,8 @@ else
   BLACK := $(VENV_BIN)/black
   ISORT := $(VENV_BIN)/isort
   PRE_COMMIT := $(VENV_BIN)/pre-commit
+  # Assuming crawl4ai-setup is a script or an executable in bin
+  CRAWL4AI_SETUP_CMD := $(VENV_BIN)/crawl4ai-setup
 endif
 
 REQ := requirements.txt
@@ -28,14 +32,15 @@ REQ_DEV := requirements-dev.txt
 .PHONY: help
 help:
 	@echo "Usage:"
-	@echo "  make venv [PYTHON_BIN=...]  Create virtualenv with optional Python binary"
-	@echo "  make install                Install runtime dependencies"
-	@echo "  make dev-install            Install dev/test dependencies"
-	@echo "  make test                   Run tests"
-	@echo "  make lint                   Run flake8"
-	@echo "  make format                 Run black + isort"
-	@echo "  make check                  Run format, lint, test"
-	@echo "  make clean                  Remove __pycache__ and *.pyc"
+	@echo "  make venv [PYTHON_BIN=...]   Create virtualenv with optional Python binary"
+	@echo "  make install                 Install runtime dependencies and run crawl4ai-setup"
+	@echo "  make dev-install             Install dev/test dependencies and run crawl4ai-setup"
+	@echo "  make test                    Run tests"
+	@echo "  make lint                    Run flake8"
+	@echo "  make format                  Run black + isort"
+	@echo "  make check                   Run format, lint, test"
+	@echo "  make clean                   Remove __pycache__ and *.pyc"
+	@echo "  make crawl4ai-setup          Run the crawl4ai setup script manually"
 
 .PHONY: venv
 venv:
@@ -43,14 +48,20 @@ venv:
 	@echo "✅ Virtual environment created using $(PYTHON_BIN)"
 
 .PHONY: install
-install: venv
+install: venv crawl4ai-setup # crawl4ai-setup is now a dependency
 	$(PIP) install -r $(REQ)
 
 .PHONY: dev-install
-dev-install: venv
+dev-install: venv crawl4ai-setup # crawl4ai-setup is now a dependency
 	$(PIP) install -r $(REQ)
 	$(PIP) install -r $(REQ_DEV)
 	$(PIP) install pre-commit
+
+.PHONY: crawl4ai-setup # Define the crawl4ai-setup target once
+crawl4ai-setup: venv
+	@echo "Running crawl4ai-setup..."
+	$(CRAWL4AI_SETUP_CMD) # Use the command variable
+	@echo "✅ crawl4ai-setup completed."
 
 .PHONY: pre-commit-install
 pre-commit-install: venv

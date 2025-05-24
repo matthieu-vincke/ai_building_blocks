@@ -25,4 +25,8 @@ sphinx
 sphinx-rtd-theme
 myst-parser
 python-dotenv
-pymongo
+agno
+duckduckgo-search
+sqlalchemy
+newspaper4k
+lxml_html_clean

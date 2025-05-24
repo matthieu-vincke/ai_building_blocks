@@ -6,7 +6,7 @@ from crawl4ai import AsyncWebCrawler, CrawlerRunConfig
 from crawl4ai.content_scraping_strategy import LXMLWebScrapingStrategy
 from crawl4ai.deep_crawling import BFSDeepCrawlStrategy
 from crawl4ai.markdown_generation_strategy import DefaultMarkdownGenerator
-from langchain.schema import Document
+from agno.document.base import Document
 
 from utils.logger import get_logger
 
@@ -39,7 +39,7 @@ async def crawl_website_for_documents(
     Asynchronously crawls a website and returns a list of deduplicated, cleaned `Document` objects.
 
     This function uses a BFS deep crawling strategy and filters out pages with low content or
-    duplicate text. HTML content is converted to Markdown before being packaged as a LangChain
+    duplicate text. HTML content is converted to Markdown before being packaged as a agno
     `Document`.
 
     Parameters:
@@ -49,7 +49,7 @@ async def crawl_website_for_documents(
         word_count_threshold (int, optional): Minimum number of words required to retain a page. Default is 200.
 
     Returns:
-        List[Document]: A list of LangChain `Document` objects with `page_content` and associated metadata.
+        List[Document]: A list of agno `Document` objects with `page_content` and associated metadata.
 
     Notes:
         - Duplicate documents (based on text hash) are skipped.
@@ -118,7 +118,7 @@ async def crawl_website_for_documents(
             }
             doc_metadata.update(metadata)
 
-            cleaned_docs.append(Document(page_content=text, metadata=doc_metadata))
+            cleaned_docs.append(Document(content=text, meta_data=doc_metadata, name="GG"))
 
     logger.info(f"Returning {len(cleaned_docs)} documents")
     return cleaned_docs
